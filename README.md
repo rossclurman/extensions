@@ -13,7 +13,7 @@ into the Infocyte platform.
 - [Feature Requests](#feature-requests)
 
 ### Overview
-The Infocyte RESPONSe extension system is build on top of [Lua 5.3](https://www.lua.org), which provides a small but featureful
+The Infocyte RESPONSE extension system is build on top of [Lua 5.3](https://www.lua.org), which provides a small but featureful
 library of built in functions. This includes file system, string , I/O, math, operations (among others). Refer
 to the [Lua Reference Manual](https://www.lua.org/manual/5.3/contents.html) for detailed documentation on usage.
 
