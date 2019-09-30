@@ -183,5 +183,5 @@ If there is a feature you would like seen added to the extension system, feel fr
 description of the new capability!
 
 ### Learn lua
-[LearningLua (Official Tutorial)](http://lua-users.org/wiki/LearningLua)
-[Learn Lua in 15 Minutes](http://tylerneylon.com/a/learn-lua/)
+- [LearningLua (Official Tutorial)](http://lua-users.org/wiki/LearningLua)
+- [Learn Lua in 15 Minutes](http://tylerneylon.com/a/learn-lua/)

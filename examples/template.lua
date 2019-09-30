@@ -4,8 +4,8 @@
 	Type: Collection
 	Description: Collects additional data
 	Author: Infocyte
-	Created: 9-19-2019
-	Updated: 9-19-2019 (Gerritz)
+	Created: 20190919
+	Updated: 20190919 (Gerritz)
 ]]--
 
 ----------------------------------------------------
@@ -34,6 +34,7 @@ end
 --    Host-side processing and analysis can be
 --    written here.
 ----------------------------------------------------
+
 
 
 ----------------------------------------------------
