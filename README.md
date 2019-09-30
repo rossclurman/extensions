@@ -51,6 +51,7 @@ down into various parts:
 - [Web](#web)
 - [Process](#process)
 - [Registry](#registry)
+- [Hashing](#hashing)
 
 #### Environmental
 
@@ -129,6 +130,32 @@ Returns a list of registry keys located at `path`. This will be empty on failure
 
 ##### hunt.registry.list_values(path: string)
 Returns a list of registry values located at `path`. This will be empty on failure.
+
+#### Hashing
+
+##### hunt.hash.sha256(path: string)
+Returns the string hash of the file
+
+##### hunt.hash.sha256_data(data)
+Returns the string hash of a data blob
+
+##### hunt.hash.sha1(path: string)
+Returns the string hash of the file
+
+##### hunt.hash.sha1_data(data)
+Returns the string hash of a data blob
+
+##### hunt.hash.md5(path: string)
+Returns the string hash of the file
+
+##### hunt.hash.md5_data(data)
+Returns the string hash of a data blob
+
+##### hunt.hash.fuzzy(path: string)
+Returns the string hash of the file
+
+##### hunt.hash.fuzzy_data(data)
+Returns the string hash of a data blob
 
 ### Examples
 
