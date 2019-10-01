@@ -1,8 +1,7 @@
-# RESPONSE Extensions
+# Infocyte Extensions
 The [Infocyte](https://www.infocyte.com) platform is an agentless Threat Hunting and Incident Response platform. In addition to
 the plethora of native host data collection and analysis provided by default, users are able to define their own collections and
-response action to be performed on endpoints and servers. Here you will find examples and contributed extensions which can be easily loaded
-into the Infocyte platform.
+response action to be performed on endpoints and servers. Here you will find examples and contributed extensions which can be easily loaded into the Infocyte platform.
 
 **This repo contains:**
 - [Extension Overview](#overview)
