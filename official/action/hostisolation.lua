@@ -18,9 +18,12 @@ computername = os.getenv("COMPUTERNAME")
 OS = hunt.env.os() -- determine host OS
 myinstance = get_hunt_api() -- "alpo1.infocyte.com"
 
+----------------------------------------------------
+-- SECTION 2: Functions
+----------------------------------------------------
 
 ----------------------------------------------------
--- SECTION 2: Actions
+-- SECTION 3: Actions
 ----------------------------------------------------
 
 -- TO DO: Check for Agent and install if not present (agent will be the only thing able to communicate out)
@@ -64,6 +67,6 @@ end
 
 
 ----------------------------------------------------
--- SECTION 3: Output
+-- SECTION 4: Output
 ----------------------------------------------------
 log("Host has been isolated to " .. infocyteips)

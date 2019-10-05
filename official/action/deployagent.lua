@@ -18,9 +18,13 @@ computername = os.getenv("COMPUTERNAME")
 OS = get_os()
 myinstance = get_hunt_api() -- "alpo1.infocyte.com"
 
+----------------------------------------------------
+-- SECTION 2: Functions
+----------------------------------------------------
+
 
 ----------------------------------------------------
--- SECTION 2: Actions
+-- SECTION 3: Actions
 ----------------------------------------------------
 
 -- TODO: Check for Agent (agent will be the only thing able to communicate out)
@@ -60,6 +64,6 @@ end
 ]]--
 
 ----------------------------------------------------
--- SECTION 3: Output
+-- SECTION 4: Output
 ----------------------------------------------------
 log("Infocyte Agent has been installed")

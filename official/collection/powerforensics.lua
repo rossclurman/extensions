@@ -8,18 +8,28 @@
 	Updated: 9-19-2019 (Gerritz)
 ]]--
 
+
 ----------------------------------------------------
--- SECTION 1: Variables & Functions
+-- SECTION 1: Variables
 ----------------------------------------------------
-infocyteips = get_infocyteips() -- "3.209.70.118"
-workingfolder = os.getenv("TEMP")
-computername = os.getenv("COMPUTERNAME")
-OS = hunt.env.os() -- determine host OS
-myinstance = get_hunt_api() -- "alpo1.infocyte.com"
+outpath = [[c:\windows\temp\ic]]
+
+--OS = hunt.env.os() -- determine host OS
+OS = "windows"
+print("Starting Script")
+
+
+----------------------------------------------------
+-- SECTION 2: Functions
+----------------------------------------------------
+
+psscript = [[
+Install-Module -name PowerForensics
+]]
 
 local function run_powershell(script)
   -- Create powershell process and feed script to its stdin
-  local pipe = io.popen("powershell.exe -nologo -win 1 -nop -command -", "w")
+  local pipe = io.popen("powershell.exe -noexit -nologo -win 1 -nop -command -", "w")
   pipe:write(script)
   pipe:close()
 end
@@ -46,18 +56,40 @@ local function base64(s)
 end
 
 ----------------------------------------------------
--- SECTION 2: Actions / Collection
+-- SECTION 3: Collection / Inspection
 ----------------------------------------------------
 
-if not string.find(OS, "windows") then
-  -- Put your powershell script in here:
-  local script = [[
-  Install-Module -name PowerForensics
-  ]]
-  run_powershell(script)
+if not string.find(OS, "windows") and hunt.env.has_powershell() then
+  -- Insert your Windows Code
+  print("Operating on Windows")
+
+  -- Create powershell process and feed script/commands to its stdin
+  local pipe = io.popen("powershell.exe -noexit -nologo -nop -command -", "w")
+  pipe:write(psscript) -- load up powershell functions and vars
+  pipe:write([[ Get-StringsMatch -Path C:\Users -Strings ]] .. make_psstringarray(strings))
+  r = pipe:close()
+  print("Powershell Returned: "..tostring(r))
+
 end
+
 ----------------------------------------------------
--- SECTION 3: Output / Results
+-- SECTION 4: Analysis
+--    Optional host-side processing and analysis.
 ----------------------------------------------------
-log("Extension successfully executed on "..computername)
-setthreatstatus("Unknown")
+
+if result then
+  threatstatus = "Suspicious"
+else
+  threatstatus = "Good"
+end
+
+----------------------------------------------------
+-- SECTION 5: Results
+--    Threat status is a set of static results used to aggregate and stack results:
+--    Good, Low Risk, Unknown, Suspicious, or Bad
+--
+--    One or more log statements can be used to send data in text format.
+----------------------------------------------------
+
+-- Mandatory: set the returned threat status of the host
+-- hunt.set_threatstatus(threatstatus)
