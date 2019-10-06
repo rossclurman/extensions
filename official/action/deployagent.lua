@@ -12,58 +12,56 @@
 ----------------------------------------------------
 -- SECTION 1: Variables
 ----------------------------------------------------
-infocyteips = get_infocyteips() -- "3.209.70.118"
-workingfolder = os.getenv("TEMP")
-computername = os.getenv("COMPUTERNAME")
-OS = get_os()
-myinstance = get_hunt_api() -- "alpo1.infocyte.com"
+agentDestination = os.getenv("TEMP").."\\icagent.exe"
+computername = hunt.env.hostname()
+OS = hunt.env.os()
+myinstanceurl = hunt.net.api() -- "alpo1.infocyte.com"
+installpath = [[C:\Program Files\Infocyte\Agent\agent.windows.exe]]
 
 ----------------------------------------------------
 -- SECTION 2: Functions
 ----------------------------------------------------
 
+[[
+If (Get-Service -name huntAgent -ErrorAction SilentlyContinue) {
+"$(Get-Date) [Information] Install started but HUNTAgent service already running. Skipping." >> $LogPath
+"$(Get-Date) [Error] Installation Error: Install started but could not download agent.windows.exe from $agentURL." >> $LogPath
+"$(Get-Date) [Error] Installation Error: Could not start agent.windows.exe. [$_]" >> $LogPath
+]]
 
 ----------------------------------------------------
 -- SECTION 3: Actions
 ----------------------------------------------------
 
--- TODO: Check for Agent (agent will be the only thing able to communicate out)
-agentinstalled = true
+-- TODO: Check for Agent
+agentinstalled = false
 if agentinstalled then
   log("Infocyte Agent is already installed")
   exit()
 else
   -- Install Infocyte Agent
-  if string.find(OS, "xp") then
-  	-- TODO: XP Install
+  if string.find(OS, "windows") then
+    agenturl = "https://s3.us-east-2.amazonaws.com/infocyte-support/executables/agent.windows.exe"
 
-  elseif string.find(OS, "windows") then
-    psagentdeploycmd = "& { \[System.Net.ServicePointManager\]::SecurityProtocol = \[System.Net.SecurityProtocolType\]::Tls12; (new-object Net.WebClient).DownloadString('https://raw.githubusercontent.com/Infocyte/PowershellTools/master/AgentDeployment/install_huntagent.ps1') | iex; installagent " .. myhuntinstance .." }"
-  	result = os.execute("powershell.exe -nologo -win 1 -executionpolicy bypass -nop -command { "..psagentdeploycmd.." }")
-  	if not result then
-      log("Powershell agent install script failed to run. \[Error: "..result.."\]")
-      exit()
-    end
   elseif string.find(OS, "osx") or string.find(OS, "bsd") then
-  	-- TODO:
+    agenturl = "https://s3.us-east-2.amazonaws.com/infocyte-support/executables/agent.osx.exe"
+
   else
-  	-- TODO: Assume linux-type OS
+  	-- TO DO: Assume linux-type OS
+    agenturl = "https://s3.us-east-2.amazonaws.com/infocyte-support/executables/agent.linux.exe"
+  end
+  -- Download agent
+  assert(hunt.web.download_file(agenturl, agentDestination, true))
+
+  -- Install agent
+  result = os.execute(agentDestination.." --install --quiet --url "..myinstanceurl.." --key "..regkey)
+  if not result then
+    log("Error: Agent failed to install. \[Error: "..result.."\]")
+    exit()
   end
 end
-
---[[
-if string.find(OS, "xp") then
-	-- TODO: XP
-elseif string.find(OS, "windows") then
-  -- TODO: Windows
-elseif string.find(OS, "osx") or string.find(OS, "bsd") then
-	-- TODO: OS
-else
-	-- TODO: Assume linux OS
-end
-]]--
 
 ----------------------------------------------------
 -- SECTION 4: Output
 ----------------------------------------------------
-log("Infocyte Agent has been installed")
+log("Infocyte Agent has been installed successfully")
