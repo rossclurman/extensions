@@ -110,17 +110,55 @@ Returns a list of IPv4 addresses associated with the input item. This will be em
 Returns a list of IPv6 addresses associated with the input item. This will be empty if lookup fails.
 
 #### Web
-For web requests, a proxy field is available but optional (can be set to `nil` if not needed). The
-format for using a proxy is `user:password@proxy_address:port`.
+For web requests, a proxy field is available but optional.
+The format for using a proxy is `user:password@proxy_address:port`.
 
-The `enforce_tls` option controls whether or not any TLS/SSL server certificate should be validated.
-This is helpful when using internal web servers that may not have a globally recognized certificate.
+Basic example:
+```lua
+client = hunt.web.new("https://my.domain.org")
+data = client:download_data()
+```
 
-##### hunt.web.download_file(url: string, local_file: string, enforce_tls: bool, proxy: string)
-Retrieves data from `url` and writes the body contents to `local_file`.
+##### get()
+Sets the HTTP request type as GET (default)
 
-##### hunt.web.download_data(url: string, enforce_tls: bool, proxy: string)
-Returns the response body as raw bytes.
+##### post()
+Sets the HTTP request type as POST
+
+##### enable_tls_verification()
+Enforces TLS certificate validation (default)
+
+##### disable_tls_verification()
+Disables TLS certificate validation
+
+##### proxy(config: string)
+Configures the client to use a proxy server
+```lua
+client = hunt.web.new("https://my.domain.org")
+client:proxy("myuser:password@10.11.12.88:8888")
+data = client:download_data()
+```
+
+##### download_data()
+Performs the HTTP request and returns the data as bytes
+
+##### download_string()
+Performs the HTTP request and returns the data as a string
+
+##### download_file(path: string)
+Performs the HTTP request and  saves the data to `path`
+```lua
+client = hunt.web.new("https://my.domain.org")
+client:download_file("./my_data_file.txt")
+```
+
+##### add_header(name: string, value: string)
+Adds an HTTP header to the client request
+```lua
+client = hunt.web.new("https://my.domain.org")
+client:add_header("authorization", "mytokenvalue")
+client:download_file("./my_data_file.txt")
+```
 
 #### Process
 
