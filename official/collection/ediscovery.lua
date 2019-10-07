@@ -130,9 +130,14 @@ elseif string.find(OS, "linux") or hunt.env.has_sh() then
 
 end
 
+
 ----------------------------------------------------
--- SECTION 4: Analysis
---    Optional host-side processing and analysis.
+-- SECTION 4: Results
+--    Threat status is a set of static results used to aggregate and stack results:
+--    Good, Low Risk, Unknown, Suspicious, or Bad
+--		Include any host-side processing and analysis necessary to report the appropriate status.
+--
+--    In addition, one or more log statements can be used to send data in text format.
 ----------------------------------------------------
 
 if result then
@@ -140,15 +145,6 @@ if result then
 else
   threatstatus = "Good"
 end
-
-----------------------------------------------------
--- SECTION 5: Results
---    Threat status is a set of static results used to aggregate and stack results:
---    Good, Low Risk, Unknown, Suspicious, or Bad
---
---    One or more log statements can be used to send data in text format.
-----------------------------------------------------
-
 
 -- Mandatory: set the returned threat status of the host
 -- hunt.set_threatstatus(threatstatus)

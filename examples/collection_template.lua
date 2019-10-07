@@ -18,6 +18,7 @@ OS = hunt.env.os() -- determine host OS
 -- SECTION 2: Functions
 ----------------------------------------------------
 
+
 ----------------------------------------------------
 -- SECTION 3: Collection / Inspection
 ----------------------------------------------------
@@ -35,8 +36,12 @@ elseif string.find(OS, "linux") or hunt.env.has_sh() then
 end
 
 ----------------------------------------------------
--- SECTION 4: Analysis
---    Optional host-side processing and analysis.
+-- SECTION 4: Results
+--    Threat status is a set of static results used to aggregate and stack results:
+--    Good, Low Risk, Unknown, Suspicious, or Bad
+--		Include any host-side processing and analysis necessary to report the appropriate status.
+--
+--    In addition, one or more log statements can be used to send data in text format.
 ----------------------------------------------------
 
 if string.find(result, "test") then
@@ -47,16 +52,9 @@ else
   threatstatus = "Unknown"
 end
 
-----------------------------------------------------
--- SECTION 5: Results
---    Threat status is a set of static results used to aggregate and stack results:
---    Good, Low Risk, Unknown, Suspicious, or Bad
---
---    One or more log statements can be used to send data in text format.
-----------------------------------------------------
-
+-- one or more log statements can be used to send resulting data or messages in text format to your Infocyte instance
 hunt.log("Extension successfully executed on "..hostname)
 hunt.log(result)
 
 -- Mandatory: set the returned threat status of the host
-hunt.setthreatstatus(threatstatus)
+hunt.set_threatstatus(threatstatus)
