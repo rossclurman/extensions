@@ -106,15 +106,24 @@ platform.
 
 #### Environmental
 
+**Example:**
+```lua
+host_info = hunt.env.host_info()
+hunt.print("OS: " .. host_info:os())
+hunt.print("Architecture: " .. host_info:arch())
+hunt.print("Hostname: " .. host_info:hostname())
+hunt.print("Domain: " .. host_info:domain())
+```
+
 | Function | Description |
 | --- | --- |
 | **hunt.env.os()** | Returns a string representing the current operating system. |
+| **hunt.env.host_info()** | Returns a table containing more host information.|
 | **hunt.env.has_python()** | Returns a boolean indicating if any version of Python is available on the system. |
 | **hunt.env.has_python2()** | Returns a boolean indicating if Python 2 is available on the system. |
 | **hunt.env.has_python3()** | Returns a boolean indicating if Python 3 is available on the system. |
 | **hunt.env.has_powershell()** | Returns a boolean indicating if Powershell is available on the system. |
 | **hunt.env.has_sh()** | Returns a boolean indicating if the bourne shell is available on the system. |
-
 
 #### Network
 
@@ -157,10 +166,22 @@ data = client:download_data()
 
 #### Process
 
+**Example:**
+```lua
+procs = hunt.process.list()
+for _, proc in pairs(procs) do
+    hunt.print("Found pid " .. proc:pid() " .. " @ " .. proc:path())
+    hunt.print("- Owned by: " .. proc:owner())
+    hunt.print("- Started by: " .. proc:ppid())
+    hunt.print("- Command Line: " .. proc:cmd_line())
+end
+```
+
 | Function | Description |
 | --- | --- |
 | **hunt.process.kill_pid(pid: number)** | Ends the process identified by `pid` |
-| **hunt.process.kill_process(name: string)** | Ends any process with `name`. |
+| **hunt.process.kill_process(name: string)** | Ends any process with `name` |
+| **hunt.process.list()** | Returns a list of processes found running |
 
 
 #### Registry
