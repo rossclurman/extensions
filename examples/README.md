@@ -43,8 +43,8 @@ There are several good editors out there but we suggest using [Atom](https://ato
 You will typically run extensions using the Infocyte Survey but for experimenting with Lua syntax, we recommend installing a Lua interpreter locally and adding it to your PATH variable.
   - [Install Lua (from source)](https://www.lua.org/download.html)
   - [Install Lua (pre-compiled)](http://luabinaries.sourceforge.net/download.html)
-
-*Note: Lua doesn't really have a maintained Windows distribution but it's a simple program consisting of a compiler (luac.exe), an interpreter (lua.exe) and a library (lua.dll). We added all the necessary binaries to this repo in dev\windows to make it easier but it may not be up to date. Download them to a folder like C:\lua and add the folder to your PATH variable like so:*
+  
+*Note: Lua doesn't really have a maintained Windows distribution but it's a simple program consisting of a compiler (luac.exe), an interpreter (lua.exe) and a library (lua.dll). Download them to a folder like C:\lua and add the folder to your PATH variable like so:*
 
 #### Windows:
 > Add-Content -Path $PROFILE.AllUsersCurrentHost -Value '$Env:Path += ";C:\lua"'
