@@ -118,6 +118,9 @@ hunt.print("Domain: " .. host_info:domain())
 | Function | Description |
 | --- | --- |
 | **hunt.env.os()** | Returns a string representing the current operating system. |
+| **hunt.env.is_linux()** | Returns a boolean indicating the system is linux. |
+| **hunt.env.is_windows()** | Returns a boolean indicating the system is windows. |
+| **hunt.env.is_macos()** | Returns a boolean indicating the system is macos. |
 | **hunt.env.host_info()** | Returns a table containing more host information.|
 | **hunt.env.has_python()** | Returns a boolean indicating if any version of Python is available on the system. |
 | **hunt.env.has_python2()** | Returns a boolean indicating if Python 2 is available on the system. |
