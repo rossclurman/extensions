@@ -2,7 +2,9 @@
 	Infocyte Extension
 	Name: Memory Extraction
 	Type: Collection
-	Description: Uses winpmem or linpmem to dump full physical memory and stream it to an S3 bucket, ftp server, or smb share. If output path not specified, will dump to local temp folder.
+	Description: Uses winpmem or linpmem to dump full physical memory and
+     stream it to an S3 bucket, ftp server, or smb share. If output path not
+     specified, will dump to local temp folder.
 	Author: Infocyte
 	Created: 9-19-2019
 	Updated: 9-19-2019 (Gerritz)
@@ -12,11 +14,11 @@
 ----------------------------------------------------
 -- SECTION 1: Variables
 ----------------------------------------------------
-infocyteips = hunt.() -- "3.209.70.118"
+infocyteips = hunt.net.() -- "3.209.70.118"
 workingfolder = os.getenv("TEMP")
 computername = os.getenv("COMPUTERNAME")
 OS = hunt.env.os() -- determine host OS
-myinstance = hunt.() -- "alpo1.infocyte.com"
+myinstance = hunt.net.api() -- "alpo1.infocyte.com"
 hunt.log("OS="..OS)
 
 ----------------------------------------------------
@@ -51,20 +53,20 @@ if string.find(OS, "windows") then
   log("Memory dump started to SMB share X")
   .
 elseif string.find(OS, "osx") or string.find(OS, "bsd") then
-	-- TODO:
+	-- TO DO:
 else
-	-- TODO: Assume linux-type OS
+	-- TO DO: Assume linux-type OS
 end
 
 --[[
 if string.find(OS, "xp") then
-	-- TODO: XP
+	-- TO DO: XP
 elseif string.find(OS, "windows") then
-  -- TODO: Windows
+  -- TO DO: Windows
 elseif string.find(OS, "osx") or string.find(OS, "bsd") then
-	-- TODO: OS
+	-- TO DO: OS
 else
-	-- TODO: Assume linux OS
+	-- TO DO: Assume linux OS
 end
 ]]--
 

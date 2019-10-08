@@ -22,12 +22,6 @@ installpath = [[C:\Program Files\Infocyte\Agent\agent.windows.exe]]
 -- SECTION 2: Functions
 ----------------------------------------------------
 
-[[
-If (Get-Service -name huntAgent -ErrorAction SilentlyContinue) {
-"$(Get-Date) [Information] Install started but HUNTAgent service already running. Skipping." >> $LogPath
-"$(Get-Date) [Error] Installation Error: Install started but could not download agent.windows.exe from $agentURL." >> $LogPath
-"$(Get-Date) [Error] Installation Error: Could not start agent.windows.exe. [$_]" >> $LogPath
-]]
 
 ----------------------------------------------------
 -- SECTION 3: Actions
@@ -56,7 +50,7 @@ else
   -- Install agent
   result = os.execute(agentDestination.." --install --quiet --url "..myinstanceurl.." --key "..regkey)
   if not result then
-    log("Error: Agent failed to install. \[Error: "..result.."\]")
+    hunt.log("Error: Agent failed to install. [Error: "..result.."]")
     exit()
   end
 end

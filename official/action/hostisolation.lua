@@ -2,7 +2,8 @@
 	Infocyte Extension
 	Name: Host Isolation
 	Type: Action
-	Description: Performs a local network isolation of a Windows, Linux, or OSX system using windows firewall, iptables, ipfw, or pf
+	Description: Performs a local network isolation of a Windows, Linux, or OSX
+	 system using windows firewall, iptables, ipfw, or pf
 	Author: Infocyte
 	Created: 9-16-2019
 	Updated: 9-16-2019 (Gerritz)
@@ -26,7 +27,8 @@ myinstance = get_hunt_api() -- "alpo1.infocyte.com"
 -- SECTION 3: Actions
 ----------------------------------------------------
 
--- TO DO: Check for Agent and install if not present (agent will be the only thing able to communicate out)
+-- TO DO: Check for Agent and install if not present
+-- agent will be the only thing able to communicate out
 agentinstalled = true
 if agentinstalled then
 	-- Continue
@@ -35,10 +37,14 @@ else
 	if string.find(OS, "xp") then
 		-- TO DO: XP
 	elseif string.find(OS, "windows") then
-		psagentdeploycmd = "& { \[System.Net.ServicePointManager\]::SecurityProtocol = \[System.Net.SecurityProtocolType\]::Tls12; (new-object Net.WebClient).DownloadString('https://raw.githubusercontent.com/Infocyte/PowershellTools/master/AgentDeployment/install_huntagent.ps1') | iex; installagent " .. myhuntinstance .." }"
+		psagentdeploycmd = [[
+		& { [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.SecurityProtocolType]::Tls12;
+		(new-object Net.WebClient).DownloadString('https://raw.githubusercontent.com/Infocyte/PowershellTools/master/AgentDeployment/install_huntagent.ps1') |
+			iex; installagent ]] .. myhuntinstance .." }"
+
 		result = os.execute("C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe -nologo -win 1 -executionpolicy bypass -nop -command { "..psagentdeploycmd.." }")
 		if not result then
-			log("Powershell agent install script failed to run. \[Error: "..result.."\]")
+			hunt.log("Powershell agent install script failed to run. [Error: "..result.."]")
 			exit()
 		end
 	elseif string.find(OS, "osx") or string.find(OS, "bsd") then

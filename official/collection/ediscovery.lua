@@ -2,7 +2,8 @@
 	Infocyte Extension
 	Name: Template
 	Type: Collection
-	Description: Example script show format, style, and options for gathering additional data from a host.
+	Description: Example script show format, style, and options for gathering
+	 additional data from a host.
 	Author: Infocyte
 	Created: 20190919
 	Updated: 20190919 (Gerritz)
@@ -133,11 +134,8 @@ end
 
 ----------------------------------------------------
 -- SECTION 4: Results
---    Threat status is a set of static results used to aggregate and stack results:
---    Good, Low Risk, Unknown, Suspicious, or Bad
---		Include any host-side processing and analysis necessary to report the appropriate status.
---
---    In addition, one or more log statements can be used to send data in text format.
+--	Set threat status to aggregate and stack results in the Infocyte app:
+--		Good, Low Risk, Unknown, Suspicious, or Bad
 ----------------------------------------------------
 
 if result then
