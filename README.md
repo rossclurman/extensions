@@ -96,173 +96,96 @@ run. Using standard Lua `print()` or `io.write()` will cause data to be written
 to standard output, but not captured and transmitted back to the Infocyte
 platform.
 
-##### hunt.log(string)
-Captures the input value and saves it to the extension output object to be 
-viewed later in the HUNT application.
-
-##### hunt.print(string)
-Writes a string to standard out, but does not capture the string in the output
-payload of the extension.
-
-##### hunt.warn(string)
-Writes a string to the `warning` log level of the survey, as well as capture to
-the script output.
-
-##### hunt.error(string)
-Writes a string to the `error` log level of the survey, as well as capture to
-the script output.
-
-##### hunt.debug(string)
-Writes a string to the `debug` log level of the survey, as well as capture to
-the script output.
-
-##### hunt.verbose(string)
-Writes a string to the `verbose` log level of the survey, as well as capture to
-the script output.
+| Function | Description |
+| --- | --- |
+| **hunt.log(string)** | Captures the input value and saves it to the extension output object to be viewed later in the Infocyte console. |
+| **hunt.warn(string)** | Writes a string to the `warning` log level of the survey, as well as capture to the script output. |
+| **hunt.error(string)** | Writes a string to the `error` log level of the survey, as well as capture to the script output. |
+| **hunt.verbose(string)** | Writes a string to the `verbose` log level of the survey, as well as capture to the script output. |
+| **hunt.debug(string)** | Writes a string to the `debug` log level of the survey, as well as capture to the script output. |
 
 #### Environmental
 
-##### hunt.env.os()
-Returns a string representing the current operating system.
+| Function | Description |
+| --- | --- |
+| **hunt.env.os()** | Returns a string representing the current operating system. |
+| **hunt.env.has_python()** | Returns a boolean indicating if any version of Python is available on the system. |
+| **hunt.env.has_python2()** | Returns a boolean indicating if Python 2 is available on the system. |
+| **hunt.env.has_python3()** | Returns a boolean indicating if Python 3 is available on the system. |
+| **hunt.env.has_powershell()** | Returns a boolean indicating if Powershell is available on the system. |
+| **hunt.env.has_sh()** | Returns a boolean indicating if the bourne shell is available on the system. |
 
-##### hunt.env.has_python()
-Returns a boolean indicating if any version of Python is available on the system.
-
-##### hunt.env.has_python2()
-Returns a boolean indicating if Python 2 is available on the system.
-
-##### hunt.env.has_python3()
-Returns a boolean indicating if Python 3 is available on the system.
-
-##### hunt.env.has_powershell()
-Returns a boolean indicating if Powershell is available on the system.
-
-##### hunt.env.has_sh()
-Returns a boolean indicating if the bourne shell is available on the system.
 
 #### Network
 
-##### hunt.net.api()
-Returns a string value of the HUNT instance URL the script is currently attached
-to. This can be empty if the script is being executed as a test or off-line scan.
+| Function | Description |
+| --- | --- |
+| **hunt.net.api()** | Returns a string value of the HUNT instance URL the script is currently attached to. This can be empty if the script is being executed as a test or off-line scan. |
+| **hunt.net.api_ipv4()** | Returns a list of IPv4 addresses associated with the HUNT API, this list can be empty if executed under testing or as an off-line scan. |
+| **hunt.net.api_ipv6()** | Returns a list of IPv6 addresses associated with the HUNT API, this list can be empty if executed under testing or as an off-line scan; |
+| **hunt.net.nslookup(string)** | Returns a list of IP addresses associated with the input item. This will be empty if lookup fails. |
+| **hunt.net.nslookup4(string)** | Returns a list of IPv4 addresses associated with the input item. This will be empty if lookup fails. |
+| **hunt.net.nslookup6(string)** | Returns a list of IPv6 addresses associated with the input item. This will be empty if lookup fails. |
 
-##### hunt.net.api_ipv4()
-Returns a list of IPv4 addresses associated with the HUNT API, this list can be
-empty if executed under testing or as an off-line scan;
-
-##### hunt.net.api_ipv6()
-Returns a list of IPv6 addresses associated with the HUNT API, this list can be
-empty if executed under testing or as an off-line scan;
-
-##### hunt.net.nslookup(string)
-Returns a list of IP addresses associated with the input item. This will be
-empty if lookup fails.
-
-##### hunt.net.nslookup4(string)
-Returns a list of IPv4 addresses associated with the input item. This will be
-empty if lookup fails.
-
-##### hunt.net.nslookup6(string)
-Returns a list of IPv6 addresses associated with the input item. This will be
-empty if lookup fails.
 
 #### Web
-For web requests, a proxy field is available but optional.
+For web requests, you can instantiate a web client to perform http(s) methods. An optional proxy and header field is also available.
 The format for using a proxy is `user:password@proxy_address:port`.
 
-Basic example:
-```lua
-client = hunt.web.new("https://my.domain.org")
-data = client:download_data()
-```
-
-##### get()
-Sets the HTTP request type as GET (default)
-
-##### post()
-Sets the HTTP request type as POST
-
-##### enable_tls_verification()
-Enforces TLS certificate validation (default)
-
-##### disable_tls_verification()
-Disables TLS certificate validation
-
-##### proxy(config: string)
-Configures the client to use a proxy server
+##### Example 1:
 ```lua
 client = hunt.web.new("https://my.domain.org")
 client:proxy("myuser:password@10.11.12.88:8888")
+client:add_header("authorization", "mytokenvalue")
+
+client:download_file("./my_data_file.txt")
 data = client:download_data()
 ```
 
-##### download_data()
-Performs the HTTP request and returns the data as bytes
+| Function | Description |
+| --- | --- |
+| **get()** | Sets the HTTP request type as GET (default) |
+| **post()** | Sets the HTTP request type as POST |
+| **enable_tls_verification()** | Enforces TLS certificate validation (default) |
+| **disable_tls_verification()** | Disables TLS certificate validation |
+| **proxy(config: string)** | Configures the client to use a proxy server |
+| **download_data()** | Performs the HTTP request and returns the data as bytes |
+| **download_string()** | Performs the HTTP request and returns the data as a string |
+| **download_file(path: string)** | Performs the HTTP request and  saves the data to `path` |
+| **add_header(name: string, value: string)** | Adds an HTTP header to the client request 
 
-##### download_string()
-Performs the HTTP request and returns the data as a string
-
-##### download_file(path: string)
-Performs the HTTP request and  saves the data to `path`
-```lua
-client = hunt.web.new("https://my.domain.org")
-client:download_file("./my_data_file.txt")
-```
-
-##### add_header(name: string, value: string)
-Adds an HTTP header to the client request
-```lua
-client = hunt.web.new("https://my.domain.org")
-client:add_header("authorization", "mytokenvalue")
-client:download_file("./my_data_file.txt")
-```
 
 #### Process
 
-##### hunt.process.kill_pid(pid: number)
-Ends the process identified by `pid`
+| Function | Description |
+| --- | --- |
+| **hunt.process.kill_pid(pid: number)** | Ends the process identified by `pid` |
+| **hunt.process.kill_process(name: string)** | Ends any process with `name`. |
 
-##### hunt.process.kill_process(name: string)
-Ends any process with `name`.
 
 #### Registry
 These registry functions interact with the `Nt*` series of Windows APIs and
 therefore use `\Registry\Users` style of registry paths. These functions will
 return empty values when run on platforms other than Windows.
 
-##### hunt.registry.list_keys(path: string)
-Returns a list of registry keys located at `path`. This will be empty on
-failure.
-
-##### hunt.registry.list_values(path: string)
-Returns a list of registry values located at `path`. This will be empty on
-failure.
+| Function | Description |
+| --- | --- |
+| **hunt.registry.list_keys(path: string)** | Returns a list of registry keys located at `path`. This will be empty on failure. |
+| **hunt.registry.list_values(path: string)** | Returns a list of registry values located at `path`. This will be empty on failure. |
 
 #### Hashing
 
-##### hunt.hash.sha256(path: string)
-Returns the string hash of the file
+| Function | Description |
+| --- | --- |
+| **hunt.hash.sha256(path: string)** | Returns the string hash of the file |
+| **hunt.hash.sha256_data(data)** | Returns the string hash of a data blob |
+| **hunt.hash.sha1(path: string)** | Returns the string hash of the file |
+| **hunt.hash.sha1_data(data)** | Returns the string hash of a data blob |
+| **hunt.hash.md5(path: string)** | Returns the string hash of the file |
+| **hunt.hash.md5_data(data)** | Returns the string hash of a data blob |
+| **hunt.hash.fuzzy(path: string)** | Returns the string hash of the file |
+| **hunt.hash.fuzzy_data(data)** | Returns the string hash of a data blob |
 
-##### hunt.hash.sha256_data(data)
-Returns the string hash of a data blob
-
-##### hunt.hash.sha1(path: string)
-Returns the string hash of the file
-
-##### hunt.hash.sha1_data(data)
-Returns the string hash of a data blob
-
-##### hunt.hash.md5(path: string)
-Returns the string hash of the file
-
-##### hunt.hash.md5_data(data)
-Returns the string hash of a data blob
-
-##### hunt.hash.fuzzy(path: string)
-Returns the string hash of the file
-
-##### hunt.hash.fuzzy_data(data)
-Returns the string hash of a data blob
 
 ### Examples
 
