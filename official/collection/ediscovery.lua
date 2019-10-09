@@ -68,6 +68,7 @@ Function Get-StringsMatch {
 
     $application.quit()
 	[System.Runtime.Interopservices.Marshal]::ReleaseComObject($application)
+	[System.GC]::Collect()
     If($results){
         $results | Export-Csv $output -NoTypeInformation
         return $results
