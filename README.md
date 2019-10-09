@@ -89,6 +89,7 @@ by Infocyte. This API can be broken down into various parts:
 - [Process](#process)
 - [Registry](#registry)
 - [Hashing](#hashing)
+- [Recovery](#recovery)
 
 #### Logging and Output
 These functions provide the only methods to capture output from scripts that are
@@ -210,6 +211,17 @@ return empty values when run on platforms other than Windows.
 | **hunt.hash.fuzzy(path: string)** | Returns the string hash of the file |
 | **hunt.hash.fuzzy_data(data)** | Returns the string hash of a data blob |
 
+#### Recovery
+
+```lua
+recovery = hunt.recovery.s3('my_key_id', 'myaccesskey', 'us-east-2', 'my-bucket')
+recovery.upload_file('c:\\windows\\system32\\notepad.exe', 'evidence.bin')
+```
+
+| Function | Description |
+| --- | --- |
+| **hunt.recovery.s3(access_key_id: string, secret_access_key: string, region: string, bucket: string)** | S3 recovery client. |
+| **upload_file(local: string, remote: string)** | Upload a local file to remote path |
 
 ### Examples
 
