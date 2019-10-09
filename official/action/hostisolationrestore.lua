@@ -12,9 +12,8 @@
 ----------------------------------------------------
 -- SECTION 1: Variables
 ----------------------------------------------------
-infocyteips = "3.209.70.118"
-workingfolder = os.getenv("TEMP")
 OS = hunt.env.os()
+workingfolder = os.getenv("TEMP")
 
 ----------------------------------------------------
 -- SECTION 2: Functions

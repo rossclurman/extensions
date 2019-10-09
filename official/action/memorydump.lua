@@ -14,12 +14,12 @@
 ----------------------------------------------------
 -- SECTION 1: Variables
 ----------------------------------------------------
-infocyteips = hunt.net.() -- "3.209.70.118"
-workingfolder = os.getenv("TEMP")
-computername = os.getenv("COMPUTERNAME")
 OS = hunt.env.os() -- determine host OS
 myinstance = hunt.net.api() -- "alpo1.infocyte.com"
-hunt.log("OS="..OS)
+computername = os.getenv("COMPUTERNAME")
+workingfolder = os.getenv("TEMP")
+
+destination = "S3"
 
 ----------------------------------------------------
 -- SECTION 2: Functions
@@ -30,47 +30,40 @@ hunt.log("OS="..OS)
 -- SECTION 3: Actions
 ----------------------------------------------------
 
+hunt.log("Memory Dump for "..OS.." Initiated")
+
 -- TODO: Install pmem driver
 agentinstalled = true
 if string.find(OS, "windows") then
   -- Load driver
   result = os.execute("winpmem_1.3.exe -L")
   if not result then
-    log("Winpmem driver failed to install. \[Error: "..result.."\]")
+    hunt.error("Winpmem driver failed to install. [Error: "..result.."]")
     exit()
   end
   -- Dump Memory to disk
   os.execute("winpmem.exe --output "..workingfolder.."\\physmem.map --format map")
-  log("Memory dump started to local "..workingfolder.."\\physmem.map")
+  hunt.log("Memory dump started to local "..workingfolder.."\\physmem.map")
   -- Dump memory to S3 bucket
   os.execute("winpmem.exe --output - --format map | ")
-  log("Memory dump started to S3 Bucket X")
+  hunt.log("Memory dump started to S3 Bucket X")
   -- Dump memory to FTP server
   os.execute("winpmem.exe --output - --format map | ")
-  log("Memory dump started to local FTP X")
+  hunt.log("Memory dump started to local FTP X")
   -- Dump memory to SMB share
   os.execute("winpmem.exe --output - --format map | ")
-  log("Memory dump started to SMB share X")
-  .
+  hunt.log("Memory dump started to SMB share X")
+
 elseif string.find(OS, "osx") or string.find(OS, "bsd") then
 	-- TO DO:
+
 else
 	-- TO DO: Assume linux-type OS
+
 end
 
---[[
-if string.find(OS, "xp") then
-	-- TO DO: XP
-elseif string.find(OS, "windows") then
-  -- TO DO: Windows
-elseif string.find(OS, "osx") or string.find(OS, "bsd") then
-	-- TO DO: OS
-else
-	-- TO DO: Assume linux OS
-end
-]]--
 
 ----------------------------------------------------
 -- SECTION 4: Output
 ----------------------------------------------------
-log("Infocyte Agent has been installed")
+log("Memory dump completed. Evidence uploaded to "..destination)

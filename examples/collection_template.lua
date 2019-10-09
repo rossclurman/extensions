@@ -19,20 +19,33 @@ OS = hunt.env.os() -- determine host OS
 -- SECTION 2: Functions
 ----------------------------------------------------
 
+-- Paste shell scripts here if using.
+script = [==[
+
+]==]
 
 ----------------------------------------------------
 -- SECTION 3: Collection / Inspection
 ----------------------------------------------------
 
 if string.find(OS, "windows") then
-  -- Insert your Windows Code
-  result = "Test data" -- filler
+  -- Insert your Windows code
+  --[[
+  local pipe = io.popen("powershell.exe -noexit -nologo -nop -command -", "w")
+  pipe:write(script) -- load up powershell functions and vars
+  r = pipe:close()
+  ]]--
+
+  result = "Test" -- filler
+
 
 elseif string.find(OS, "osx") then
     -- Insert your MacOS Code
 
+
 elseif string.find(OS, "linux") or hunt.env.has_sh() then
     -- Insert your POSIX (linux) Code
+
 
 end
 
@@ -56,10 +69,10 @@ else
   threatstatus = "Unknown"
 end
 
+-- Mandatory: set the returned threat status of the host
+hunt.set_threatstatus(threatstatus)
+
 -- one or more log statements can be used to send resulting data or messages in
 -- text format to your Infocyte instance
 hunt.log("Extension successfully executed on "..hostname)
 hunt.log(result)
-
--- Mandatory: set the returned threat status of the host
-hunt.set_threatstatus(threatstatus)

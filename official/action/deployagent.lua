@@ -12,11 +12,12 @@
 ----------------------------------------------------
 -- SECTION 1: Variables
 ----------------------------------------------------
-agentDestination = os.getenv("TEMP").."\\icagent.exe"
-computername = hunt.env.hostname()
 OS = hunt.env.os()
-myinstanceurl = hunt.net.api() -- "alpo1.infocyte.com"
+myinstance = hunt.net.api() -- "alpo1.infocyte.com"
+computername = hunt.env.hostname()
+
 installpath = [[C:\Program Files\Infocyte\Agent\agent.windows.exe]]
+agentDestination = os.getenv("TEMP").."\\icagent.exe"
 
 ----------------------------------------------------
 -- SECTION 2: Functions

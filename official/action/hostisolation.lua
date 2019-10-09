@@ -13,15 +13,17 @@
 ----------------------------------------------------
 -- SECTION 1: Variables
 ----------------------------------------------------
-infocyteips = get_infocyteips() -- "3.209.70.118"
+OS = hunt.env.os() -- determine host OS
+myinstance = hunt.net.api() -- "alpo1.infocyte.com"
+infocyteips = hunt.net.api_ipv4()
 workingfolder = os.getenv("TEMP")
 computername = os.getenv("COMPUTERNAME")
-OS = hunt.env.os() -- determine host OS
-myinstance = get_hunt_api() -- "alpo1.infocyte.com"
+
 
 ----------------------------------------------------
 -- SECTION 2: Functions
 ----------------------------------------------------
+
 
 ----------------------------------------------------
 -- SECTION 3: Actions
