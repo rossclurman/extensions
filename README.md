@@ -51,6 +51,9 @@ routines (like changing local logging configurations), or other installing
 3rd party tools.
 
 
+![](./images/architecture.PNG)
+
+
 ### Usage
 Configuring of new extensions is a very simple process. After logging into your
 Infocyte instance (with
