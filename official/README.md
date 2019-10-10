@@ -8,6 +8,7 @@ The extensions here are maintained, tested, and supported by Infocyte.
 
 - [Collection] Yara_Scanner
 - [Collection] Powerforensics_MFT
+- [Collection] EDiscovery
 - [Action] Host_Isolation 
 - [Action] Host_Isolation_Restore
 - [Action] Enable_VSS
