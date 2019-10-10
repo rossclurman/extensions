@@ -2,7 +2,7 @@
 The [Infocyte](https://www.infocyte.com) platform is an agentless Threat Hunting
 and Incident Response platform. In addition to the plethora of native host data
 collection and analysis provided by default, users are able to define their own
-collections and response action to be performed on endpoints and servers. Here
+collections and response actions to be performed on endpoints and servers. Here
 you will find examples and contributed extensions which can be easily loaded
 into the Infocyte platform.
 
@@ -24,7 +24,7 @@ built-in functions. This includes file system, string , I/O, math, operations
 detailed documentation on usage or you can click [here](#learn-lua) for Lua 
 tutorials.
 
-In addition to the Lua standard library, Infocyte exposes the full capabilities
+In addition to the Lua standard library, Infocyte exposes capabilities
 of its' agent and endpoint collector ("Survey") that make interacting with host
 operating systems more powerful and convenient. This extended language is the
 real engine that powers the extension system. With these enhancements, extension
@@ -236,7 +236,8 @@ hunt.log("My first HUNT extension!")
 Infocyte welcomes any contributions to this repository. The preferred method is
 to
 [open a pull request](https://help.github.com/en/articles/about-pull-requests)
-with a description of the incoming extension.
+with a description of the incoming extension. The extension will undergo a
+code review before being merged.
 
 ### Feature Requests
 If there is a feature you would like seen added to the extension system, feel
