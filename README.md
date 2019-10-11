@@ -94,6 +94,7 @@ by Infocyte. This API can be broken down into various parts:
 - [Hashing](#hashing)
 - [Recovery](#recovery)
 - [Yara](#yara)
+- [Extras](#extras)
 
 #### Logging and Output
 These functions provide the only methods to capture output from scripts that are
@@ -252,6 +253,32 @@ end
 | **hunt.yara.new()** | New yara instance. |
 | **add_rule(rule: string)** | Add a rule to the yara instance. Once a scan is executed, no more rules can be added. |
 | **scan(path: string)** | Scan a file at `path`, returns a list of the rules matched. |
+
+#### Extras
+
+**base64 a string**
+
+```lua
+psscript = [[
+Install-Module -name PowerForensics
+]]
+
+-- lua string to bytes conversion
+local bytes = { string.byte(psscript, 1,-1) }
+-- get a base64 string from the data
+psscript_b64 = hunt.base64(bytes)
+hunt.print("base64 script: " .. psscript_b64)
+-- get the bytes from a base64 string
+back_to_string = hunt.unbase64(psscript_b64)
+-- print bytes as a string
+hunt.print("back to string: " .. hunt.bytes_to_string(back_to_string))
+```
+
+| Function | Description |
+| --- | --- |
+| **hunt.base64(data: bytes)** | Takes a `table` of bytes and returns a base64 encoded `string`. |
+| **hunt.unbase64(data: string)** | Takes a base64 encoded `string` and returns a `table` of bytes. |
+| **hunt.bytes_to_string(data: bytes)** | Takes a `table` of bytes and returns a `string`. |
 
 
 ### Examples
