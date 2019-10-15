@@ -12,14 +12,14 @@
 ----------------------------------------------------
 -- SECTION 1: Variables
 ----------------------------------------------------
-OS = hunt.env.os() -- determine host OS
 
 
 ----------------------------------------------------
 -- SECTION 2: Functions
 ----------------------------------------------------
 
--- Paste shell scripts here if using.
+
+-- You can define shell scripts here if using any.
 script = [==[
 
 ]==]
@@ -28,25 +28,28 @@ script = [==[
 -- SECTION 3: Collection / Inspection
 ----------------------------------------------------
 
-if string.find(OS, "windows") then
+-- All Lua and hunt.* functions are cross-platform.
+host_info = hunt.env.host_info()
+os = host_info:os()
+hunt.verbose("Starting Extention. Hostname: " .. host_info:hostname() .. ", Domain: " .. host_info:domain() .. ", OS: " .. host_info:os() .. ", Architecture: " .. host_info:arch())
+
+
+
+-- All OS-specific instructions should be behind an 'if' statement
+if hunt.env.is_windows() then
   -- Insert your Windows code
-  --[[
-  local pipe = io.popen("powershell.exe -noexit -nologo -nop -command -", "w")
-  pipe:write(script) -- load up powershell functions and vars
-  r = pipe:close()
-  ]]--
 
-  result = "Test" -- filler
+  result = "Test" -- filler [DELETE ME]
 
-
-elseif string.find(OS, "osx") then
+elseif hunt.env.is_macos() then
     -- Insert your MacOS Code
 
 
-elseif string.find(OS, "linux") or hunt.env.has_sh() then
+elseif hunt.env.is_linux() or hunt.env.has_sh() then
     -- Insert your POSIX (linux) Code
 
-
+else
+    hunt.warn("WARNING: Not a compatible operating system for this extension [" .. host_info:os() .. "]")
 end
 
 ----------------------------------------------------
@@ -61,18 +64,16 @@ end
 --   format.
 ----------------------------------------------------
 
-if string.find(result, "test") then
-  threatstatus = "Good"
-elseif string.find(result, "bad") then
-  threatstatus = "Bad"
-else
-  threatstatus = "Unknown"
-end
 
--- Mandatory: set the returned threat status of the host
-hunt.set_threatstatus(threatstatus)
+-- Set the returned threat status of the host based on the extension results
+if string.find(result, "test") then
+  hunt.status.good()
+elseif string.find(result, "bad") then
+  hunt.status.bad()
+else
+  hunt.status.unknown()
+end
 
 -- one or more log statements can be used to send resulting data or messages in
 -- text format to your Infocyte instance
-hunt.log("Extension successfully executed on "..hostname)
-hunt.log(result)
+hunt.log("Result: Extension successfully executed on " .. hostname)
