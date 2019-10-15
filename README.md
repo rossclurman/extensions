@@ -9,7 +9,7 @@ into the Infocyte platform.
 **This repo contains:**
 - [Extension Overview](#overview)
 - [Usage Instructions](#usage)
-- [API Reference](#api)
+- [API Reference](#api-reference)
 - [Examples](#examples)
 - [Contributing Instructions](#contributing)
 - [Feature Requests](#feature-requests)
