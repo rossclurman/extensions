@@ -22,17 +22,23 @@ In the future, we may introduce a filetype that includes metadata like this.
 ]]--
 
 #### Extension Types
-There may be some ambiguity between an extension's actual type: is it a collection or action extension? When in doubt, anytime the extension performs changes to the system, it should probably be labelled an **Action** extension. Although these types are not going to be initially enforced, the near future workflow for using **Action** extensions will be separated from **Collection** extensions using a Response workflow in the Infocyte application which is independent of scanning.
+Should your extension be labelled a collection or action extension? Occasionally an extension will blur the lines so use this as a guideline:
+
+- Collection extensions are run at scan-time to collect data or inspect systems in a way that does not alter the system. These should be safe to run on a lot of systems ideally.
+
+- Anytime the extension performs changes to the system, it should usually be labelled an **Action** extension. If the extension would normally be run to respond to something that was found already (such as performing a memory dump), it should also probably be labelled as a **Response** extension due to the workflow difference and installation of a third party tool.
+
+Although these types are not going to be initially enforced anywhere in the app, the future workflow for using **Action** extensions will soon be separated from **Collection** extensions using a response workflow in the Infocyte application. This workflow will have its' own page and action steps so it will be independent of discovery and scanning (where **Collection** extensions will remain).
 
 
-## Infocyte's Survey (Hunt.\*) API
-Infocyte exposes the functionality of its' Survey and Agent to Lua via the `hunt.\*` library of functions. Where possible, use these functions over shell commands as they are cross-platform, safer, and implemented at a lower level on each operating system.
+## Infocyte's Survey (hunt.\*) API
+Infocyte exposes the functionality of its' Survey and Agent to Lua via the `hunt.\*` library of functions. Where possible, use these functions over shell commands as they are cross-platform, safer, and are implemented at a lower level on each operating system.
 
 
 ## Formatting results
 
 #### Threat status
-Threat Status provides aggregation for display in the Infocyte app. Use this feature to highlight interesting results.d
+Threat Status provides aggregation for display in the Infocyte app. Use this feature to highlight interesting results.
 
 You must use one of the built-in statuses below:
 - Blacklist (will set host as compromised)
@@ -48,12 +54,12 @@ You must use one of the built-in statuses below:
 `hunt.log()` is the function to send data to Infocyte as part of the survey results. Use this for any textual data. It can be viewed in raw form in the app or extracted via the API.
 
 **Max Size of Log Messages:** 1MB
-**Max Number of Log Messages:** 1000
+**Max Number of Log Messages:** 100
 
-#### Binary or Large Evidence Data
-If your extension recovers Binary data or other types of large evidence (i.e. memory dump, files, .evt or .dat files), you should send it to a 3rd party bucket that users provide.
+#### Binary or Large Evidence Data Recovery
+If your extension recovers Binary data or other types of large evidence files (i.e. memory dump, files, .evt or .dat files), you should send it to a user-provided 3rd party bucket.
 
-The following functions are built in and available to send data if the variables are provided:
+The following `Recovery` functions are built in and available to send data if the variables are provided:
 - S3 Bucket
-- sFTP site
-- Local SMB share on the target network
+- sFTP site [TBD]
+- Local SMB share on the target network [TBD]

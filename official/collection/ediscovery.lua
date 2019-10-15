@@ -1,9 +1,9 @@
 --[[
 	Infocyte Extension
-	Name: Template
+	Name: E-Discovery
 	Type: Collection
-	Description: Example script show format, style, and options for gathering
-	 additional data from a host.
+	Description: Searches the hard drive for office documents with specified
+		keywords. Returns a csv with a list of files.
 	Author: Infocyte
 	Created: 20190919
 	Updated: 20190919 (Gerritz)
@@ -14,11 +14,6 @@
 ----------------------------------------------------
 strings = {'Gerritz', 'test'}
 outpath = [[c:\windows\temp\edisco.csv]]
-
---OS = hunt.env.os() -- determine host OS
-OS = "windows"
-print("Starting Script")
-
 
 
 ----------------------------------------------------
@@ -104,32 +99,40 @@ end
 -- SECTION 3: Collection / Inspection
 ----------------------------------------------------
 
-if string.find(OS, "windows") and hunt.env.has_powershell() then
-  -- Insert your Windows Code
-  print("Operating on Windows")
 
-  -- Create powershell process and feed script/commands to its stdin
-  local pipe = io.popen("powershell.exe -noexit -nologo -nop -command -", "w")
-  pipe:write(psscript) -- load up powershell functions and vars
-  pipe:write([[ Get-StringsMatch -Path C:\Users -Strings ]] .. make_psstringarray(strings))
-  r = pipe:close()
-  print("Powershell Returned: "..tostring(r))
+host_info = hunt.env.host_info()
+os = host_info:os()
+hunt.verbose("Starting Extention. Hostname: " .. host_info:hostname() .. ", Domain: " .. host_info:domain() .. ", OS: " .. host_info:os() .. ", Architecture: " .. host_info:arch())
 
-  result = file_check(outpath)
-  if result then
-	local file = io.open(outpath, "r") -- r read mode
-    local output = file:read("*all") -- *a or *all reads the whole file
-    file:close()
-	os.remove(outpath)
-	hunt.log(output) -- send to Infocyte
-  end
 
-elseif string.find(OS, "osx") then
-	-- Insert your MacOS Code
+if hunt.env.is_windows() and hunt.env.has_powershell() then
+	-- Insert your Windows Code
+	hunt.debug("Operating on Windows")
 
-elseif string.find(OS, "linux") or hunt.env.has_sh() then
-	-- Insert your POSIX (linux) Code
+	-- Create powershell process and feed script/commands to its stdin
+	local pipe = io.popen("powershell.exe -noexit -nologo -nop -command -", "w")
+	pipe:write(psscript) -- load up powershell functions and vars
+	pipe:write([[ Get-StringsMatch -Path C:\Users -Strings ]] .. make_psstringarray(strings))
+	r = pipe:close()
+	hunt.verbose("Powershell Returned: "..tostring(r))
 
+	result = file_check(outpath)
+	if result then
+		local file = io.open(outpath, "r") -- r read mode
+		local output = file:read("*all") -- *a or *all reads the whole file
+		file:close()
+		os.remove(outpath)
+		hunt.log(output) -- send to Infocyte
+	end
+
+elseif hunt.env.is_macos() then
+    -- Insert your MacOS Code
+
+elseif hunt.env.is_linux() or hunt.env.has_sh() then
+    -- Insert your POSIX (linux) Code
+
+else
+    hunt.warn("WARNING: Not a compatible operating system for this extension [" .. host_info:os() .. "]")
 end
 
 
@@ -139,11 +142,9 @@ end
 --		Good, Low Risk, Unknown, Suspicious, or Bad
 ----------------------------------------------------
 
-if result then
-  threatstatus = "Suspicious"
-else
-  threatstatus = "Good"
-end
-
 -- Mandatory: set the returned threat status of the host
--- hunt.set_threatstatus(threatstatus)
+if result then
+  hunt.status.suspicious()
+else
+  hunt.status.good()
+end
