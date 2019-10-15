@@ -50,24 +50,8 @@ remediation actions like host isolation, malware killing, host hardening
 routines (like changing local logging configurations), or other installing
 3rd party tools.
 
-
-![](./images/architecture.PNG)
-
-
 ### Usage
-Configuring of new extensions is a very simple process. After logging into your
-Infocyte instance (with
-an administrator role) simply navigate to `Admin->Extensions`. Here you can see
-the list of current extensions
-loaded into the system:
-
-![](./images/extension_list.png)
-
-Clicking on an existing item will allow you to view the extension body and edit
-it. To add a new extension click
-the `Add Extension`, this will take to you to the extension editor:
-
-![Extension List](images/extension_edit.png)
+After logging into your Infocyte instance (with an administrator role) simply navigate to `Admin->Extensions`. 
 
 You can copy and paste an extension from this repository (check the 
 [contrib folder](/contrib) for submitted extensions), or start from scratch
@@ -77,6 +61,8 @@ Hitting save will perform a syntax validation and if everything checks out, will
 save the newly created extension for use. To make the extension available to 
 deploy during a scan, make sure you click the `Active` column to enable it as an
 option.
+
+Once an extension is created and activated, it can be chosen for execution during a scan of a target group.
 
 *Note: The roadmap has us separating action extensions into their own workflow
 within the interface.*
