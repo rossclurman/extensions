@@ -13,8 +13,9 @@
 -- SECTION 1: Variables
 ----------------------------------------------------
 strings = {'Gerritz', 'test'}
-outpath = [[c:\windows\temp\edisco.csv]]
+searchpath = [[C:\Users]]
 
+outpath = [[c:\windows\temp\edisco.csv]]
 
 ----------------------------------------------------
 -- SECTION 2: Functions
@@ -69,41 +70,27 @@ Function Get-StringsMatch {
         return $results
     }
 }
-
 ]==]
 
-function file_check(file_name)
-  local file_found=io.open(file_name, "r")
-
-  if file_found==nil then
-    file_found=file_name .. " ... Error - File Not Found"
-  else
-    file_found=file_name .. " ... File Found"
-  end
-  return file_found
-end
-
 function make_psstringarray(list)
-  -- Converts a lua list (table) into a string powershell list
-  psarray = "@("
-  for _,value in ipairs(list)
-  do
+	-- Converts a lua list (table) into a string powershell list
+	psarray = "@("
+	for _,value in ipairs(list)
+	do
 	print("Adding search param: " .. tostring(value))
 	psarray = psarray .. "\"".. tostring(value) .. "\"" .. ","
-  end
-  psarray = psarray:sub(1, -2) .. ")"
-  return psarray
+	end
+	psarray = psarray:sub(1, -2) .. ")"
+	return psarray
 end
 
 ----------------------------------------------------
 -- SECTION 3: Collection / Inspection
 ----------------------------------------------------
 
-
 host_info = hunt.env.host_info()
 os = host_info:os()
 hunt.verbose("Starting Extention. Hostname: " .. host_info:hostname() .. ", Domain: " .. host_info:domain() .. ", OS: " .. host_info:os() .. ", Architecture: " .. host_info:arch())
-
 
 if hunt.env.is_windows() and hunt.env.has_powershell() then
 	-- Insert your Windows Code
@@ -112,18 +99,17 @@ if hunt.env.is_windows() and hunt.env.has_powershell() then
 	-- Create powershell process and feed script/commands to its stdin
 	local pipe = io.popen("powershell.exe -noexit -nologo -nop -command -", "w")
 	pipe:write(psscript) -- load up powershell functions and vars
-	pipe:write([[ Get-StringsMatch -Path C:\Users -Strings ]] .. make_psstringarray(strings))
+	pipe:write('Get-StringsMatch -Path ' .. searchpath .. ' -Strings ' .. make_psstringarray(strings))
 	r = pipe:close()
 	hunt.verbose("Powershell Returned: "..tostring(r))
 
-	result = file_check(outpath)
-	if result then
-		local file = io.open(outpath, "r") -- r read mode
-		local output = file:read("*all") -- *a or *all reads the whole file
-		file:close()
-		os.remove(outpath)
-		hunt.log(output) -- send to Infocyte
-	end
+	local file = io.open(outpath, "r") -- r read mode
+	if file ~= nil then
+		output = file:read("*all") -- *a or *all reads the whole file
+	 	file:close()
+	  	os.remove(outpath)
+	  	hunt.log(output) -- send to Infocyte
+  	end
 
 elseif hunt.env.is_macos() then
     -- Insert your MacOS Code
@@ -143,8 +129,8 @@ end
 ----------------------------------------------------
 
 -- Mandatory: set the returned threat status of the host
-if result then
-  hunt.status.suspicious()
+if output then
+	hunt.suspicious()
 else
-  hunt.status.good()
+	hunt.good()
 end
