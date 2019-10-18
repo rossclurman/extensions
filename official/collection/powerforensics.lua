@@ -14,10 +14,6 @@
 ----------------------------------------------------
 outpath = [[c:\windows\temp\ic]]
 
---OS = hunt.env.os() -- determine host OS
-OS = "windows"
-print("Starting Script")
-
 
 ----------------------------------------------------
 -- SECTION 2: Functions
@@ -42,16 +38,21 @@ end
 -- SECTION 3: Collection / Inspection
 ----------------------------------------------------
 
-if not string.find(OS, "windows") and hunt.env.has_powershell() then
-  -- Insert your Windows Code
-  print("Operating on Windows")
+host_info = hunt.env.host_info()
+os = host_info:os()
+hunt.verbose("Starting Extention. Hostname: " .. host_info:hostname() .. ", Domain: " .. host_info:domain() .. ", OS: " .. host_info:os() .. ", Architecture: " .. host_info:arch())
 
-  -- Create powershell process and feed script/commands to its stdin
-  local pipe = io.popen("powershell.exe -noexit -nologo -nop -command -", "w")
-  pipe:write(psscript) -- load up powershell functions and vars
-  pipe:write([[ Get-StringsMatch -Path C:\Users -Strings ]] .. make_psstringarray(strings))
-  r = pipe:close()
-  print("Powershell Returned: "..tostring(r))
+
+if hunt.env.is_windows() and hunt.env.has_powershell() then
+	-- Insert your Windows Code
+    hunt.debug("Operating on Windows")
+
+    -- Create powershell process and feed script/commands to its stdin
+    local pipe = io.popen("powershell.exe -noexit -nologo -nop -command -", "w")
+    pipe:write(psscript) -- load up powershell functions and vars
+    pipe:write([[Get-ForensicMFT]])
+    r = pipe:close()
+    hunt.verbose("Powershell Returned: "..tostring(r))
 
 end
 
@@ -62,10 +63,7 @@ end
 ----------------------------------------------------
 
 if result then
-  threatstatus = "Suspicious"
+  hunt.suspicious()
 else
-  threatstatus = "Good"
+  hunt.good()
 end
-
--- Mandatory: set the returned threat status of the host
--- hunt.set_threatstatus(threatstatus)
