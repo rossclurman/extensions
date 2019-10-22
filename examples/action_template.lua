@@ -10,7 +10,7 @@
 ]]--
 
 ----------------------------------------------------
--- SECTION 1: Variables
+-- SECTION 1: Inputs (Variables)
 ----------------------------------------------------
 
 
@@ -20,7 +20,7 @@
 
 
 -- You can define shell scripts here if using any.
-script = [==[
+initscript = [==[
 
 ]==]
 

@@ -9,7 +9,7 @@
 ]]--
 
 ----------------------------------------------------
--- SECTION 1: Variables
+-- SECTION 1: Inputs (Variables)
 ----------------------------------------------------
 OS = hunt.env.os() -- determine host OS
 

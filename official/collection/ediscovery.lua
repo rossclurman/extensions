@@ -10,21 +10,20 @@
 ]]--
 
 ----------------------------------------------------
--- SECTION 1: Variables
+-- SECTION 1: Inputs (Variables)
 ----------------------------------------------------
 strings = {'Gerritz', 'test'}
 searchpath = [[C:\Users]]
 
-outpath = [[c:\windows\temp\edisco.csv]]
+
 
 ----------------------------------------------------
 -- SECTION 2: Functions
 ----------------------------------------------------
 
-psscript = "$output = \"" .. outpath .. "\"\n"
-psscript = psscript .. [==[
+initscript = [==[
+#Requires -Version 3.0
 function Get-FileSignature {
-    #Requires -Version 3.0
     [CmdletBinding()]
     Param(
        [Parameter(Position=0,Mandatory=$true, ValueFromPipelineByPropertyName=$true,ValueFromPipeline=$True)]
@@ -124,6 +123,7 @@ Function Get-StringsMatch {
 	param (
 		[string]$path = $env:systemroot,
 		[string[]]$Strings,
+        [string]$Temppath,
 		[int]$charactersAround = 30
 	)
     $results = @()
@@ -133,14 +133,21 @@ Function Get-StringsMatch {
 		throw "Error opening com object"
 	}
     $application.visible = $False
-    $files = Get-Childitem $path -recurse -filter *.doc | Get-FileSignature | where {
-$_.HexSignature -match "504B|D0CF" }
+    $files = Get-Childitem $path -recurse -filter *.doc |
+            Get-FileSignature | where { $_.HexSignature -match "504B|D0CF" }
     # Loop through all *.doc files in the $path directory
     Foreach ($file In $files) {
 		try {
 			$document = $application.documents.open($file.FullName,$false,$true)
 		} catch {
-			Write-Error "Could not open $($file.FullName)"
+			Write-Warning "Could not open $($file.FullName)"
+            $properties = @{
+               File = $file.FullName
+               Filesize = $Null
+               Match = "ERROR: Could not open file"
+               TextAround = $Null
+            }
+            $results += New-Object -TypeName PsCustomObject -Property $properties
 			continue
 		}
         $range = $document.content
@@ -163,13 +170,9 @@ $_.HexSignature -match "504B|D0CF" }
     $application.quit()
 	[System.Runtime.Interopservices.Marshal]::ReleaseComObject($application)
     If($results){
-        $results | Export-Csv $output -NoTypeInformation
-		[System.GC]::Collect()
-        return $results
-    } else {
-		"No Results" > $output
-        [System.GC]::Collect()
-	}
+        $results | Export-Csv $Temppath -NoTypeInformation -Encoding ASCII
+        # return $results
+    }
 }
 
 ]==]
@@ -197,22 +200,24 @@ hunt.verbose("Starting Extention. Hostname: " .. host_info:hostname() .. ", Doma
 if hunt.env.is_windows() and hunt.env.has_powershell() then
 	-- Insert your Windows Code
 	hunt.debug("Operating on Windows")
-
+    tempfile = [[c:\windows\temp\icext.csv]]
 	-- Create powershell process and feed script/commands to its stdin
 	local pipe = io.popen("powershell.exe -noexit -nologo -nop -command -", "w")
-	pipe:write(psscript) -- load up powershell functions and vars
-	pipe:write('Get-StringsMatch -Path ' .. searchpath .. ' -Strings ' .. make_psstringarray(strings))
+	pipe:write(initscript) -- load up powershell functions and vars
+	pipe:write('Get-StringsMatch -Temppath ' .. tempfile .. ' -Path ' .. searchpath .. ' -Strings ' .. make_psstringarray(strings))
 	r = pipe:close()
-	hunt.verbose("Powershell Returned: "..tostring(r))
+	-- hunt.verbose("Powershell Returned: "..tostring(r))
 
-	file = io.open(outpath, "r") -- r read mode
-    output = file:read("*all") -- *a or *all reads the whole file
-	file:close()
-	if output then
-        os.remove(outpath)
-        hunt.log(output) -- send to Infocyte
+	file = io.open(tempfile, "r") -- r read mode
+	if file then
+        output = file:read("*all") -- *a or *all reads the whole file
+        if output then
+            hunt.log(output) -- send to Infocyte
+            -- os.remove(temp)
+        end
+        file:close()
     end
-	
+
 elseif hunt.env.is_macos() then
     -- Insert your MacOS Code
 

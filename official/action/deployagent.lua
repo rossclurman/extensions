@@ -10,7 +10,7 @@
 ]]--
 
 ----------------------------------------------------
--- SECTION 1: Variables
+-- SECTION 1: Inputs (Variables)
 ----------------------------------------------------
 agentDestination = os.getenv("TEMP").."/icagent.exe"
 regkey = nil

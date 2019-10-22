@@ -1,28 +1,31 @@
 --[[
     Infocyte Extension
-    Name: Template
+    Name: Yara Scanner
     Type: Collection
-    Description: Example script show format, style, and options for gathering
-     additional data from a host.
+    Description: Example script showing how to use YARA
     Author: Infocyte
-    Created: 20190919
-    Updated: 20190919 (Gerritz)
+    Created: 20191018
+    Updated: 20191018 (Gerritz)
 ]]--
 
 ----------------------------------------------------
 -- SECTION 1: Inputs (Variables)
 ----------------------------------------------------
 
+rule = [==[
+rule is_malware {
+  strings:
+    $flag = "IAmMalware"
+  condition:
+    $flag
+}
+]==]
+
 
 ----------------------------------------------------
 -- SECTION 2: Functions
 ----------------------------------------------------
 
-
--- You can define shell scripts here if using any.
-initscript = [==[
-
-]==]
 
 ----------------------------------------------------
 -- SECTION 3: Collection / Inspection
@@ -33,17 +36,22 @@ host_info = hunt.env.host_info()
 os = host_info:os()
 hunt.verbose("Starting Extention. Hostname: " .. host_info:hostname() .. ", Domain: " .. host_info:domain() .. ", OS: " .. host_info:os() .. ", Architecture: " .. host_info:arch())
 
-
+result = false
+yara = hunt.yara.new()
+yara:add_rule(rule)
 
 -- All OS-specific instructions should be behind an 'if' statement
 if hunt.env.is_windows() then
   -- Insert your Windows code
+    file = "c:\\malware\\lives\\here\\bad.exe"
 
-  result = "Test" -- filler [DELETE ME]
+    for _, signature in pairs(yara:scan(file)) do
+        hunt.log("Found " .. signature .. " in file!")
+        result = true
+    end
 
 elseif hunt.env.is_macos() then
     -- Insert your MacOS Code
-
 
 elseif hunt.env.is_linux() or hunt.env.has_sh() then
     -- Insert your POSIX (linux) Code
@@ -54,26 +62,9 @@ end
 
 ----------------------------------------------------
 -- SECTION 4: Results
---  Threat status is a set of static results used to aggregate and stack
---  results:
---      Good, Low Risk, Unknown, Suspicious, or Bad
---    Include any host-side processing and analysis necessary to report the
---   appropriate status.
---
---  In addition, one or more log statements can be used to send data in text
---   format.
 ----------------------------------------------------
 
-
--- Set the returned threat status of the host based on the extension results
-if string.find(result, "test") then
-  hunt.status.good()
-elseif string.find(result, "bad") then
-  hunt.status.bad()
-else
-  hunt.status.unknown()
+if result == true then
+    hunt.bad()
 end
-
--- one or more log statements can be used to send resulting data or messages in
--- text format to your Infocyte instance
 hunt.log("Result: Extension successfully executed on " .. hostname)

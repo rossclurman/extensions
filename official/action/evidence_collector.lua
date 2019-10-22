@@ -1,18 +1,21 @@
 --[[
     Infocyte Extension
-    Name: Template
-    Type: Collection
-    Description: Example script show format, style, and options for gathering
-     additional data from a host.
+    Name: Evidence Collector
+    Type: Action
+    Description: Collects event logs, .dat files, etc. from system and forwards
+        them to your Recovery point.
     Author: Infocyte
-    Created: 20190919
-    Updated: 20190919 (Gerritz)
+    Created: 20191018
+    Updated: 20191018 (Gerritz)
 ]]--
 
 ----------------------------------------------------
 -- SECTION 1: Inputs (Variables)
 ----------------------------------------------------
-
+aws_key_id = ''
+s3_secret = ''
+s3_region = 'us-east-2' -- US East (Ohio)
+s3_bucket = 'test-extensions'
 
 ----------------------------------------------------
 -- SECTION 2: Functions
@@ -21,7 +24,14 @@
 
 -- You can define shell scripts here if using any.
 initscript = [==[
-
+#Requires -Version 3.0
+if (-NOT (Get-Module PowerForensics)) {
+    Install-Module -name 7Zip4Powershell -Force -Scope CurrentUser
+}
+function get-logs ($outpath="C:\windows\temp\logs.7z") {
+    $securitylogs = C:\Windows\System32\winevt\Logs\Security.evtx
+    Compress-7Zip -Path $securitylogs -ArchiveFileName $outpath
+}
 ]==]
 
 ----------------------------------------------------
@@ -36,7 +46,7 @@ hunt.verbose("Starting Extention. Hostname: " .. host_info:hostname() .. ", Doma
 
 
 -- All OS-specific instructions should be behind an 'if' statement
-if hunt.env.is_windows() then
+if hunt.env.is_windows() and hunt.env.has_powershell() then
   -- Insert your Windows code
 
   result = "Test" -- filler [DELETE ME]
