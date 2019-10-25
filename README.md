@@ -101,10 +101,10 @@ platform.
 **Example:**
 ```lua
 host_info = hunt.env.host_info()
-hunt.print("OS: " .. host_info:os())
-hunt.print("Architecture: " .. host_info:arch())
-hunt.print("Hostname: " .. host_info:hostname())
-hunt.print("Domain: " .. host_info:domain())
+hunt.log("OS: " .. host_info:os())
+hunt.log("Architecture: " .. host_info:arch())
+hunt.log("Hostname: " .. host_info:hostname())
+hunt.log("Domain: " .. host_info:domain())
 ```
 
 | Function | Description |
@@ -165,10 +165,10 @@ data = client:download_data()
 ```lua
 procs = hunt.process.list()
 for _, proc in pairs(procs) do
-    hunt.print("Found pid " .. proc:pid() " .. " @ " .. proc:path())
-    hunt.print("- Owned by: " .. proc:owner())
-    hunt.print("- Started by: " .. proc:ppid())
-    hunt.print("- Command Line: " .. proc:cmd_line())
+    hunt.log("Found pid " .. proc:pid() " .. " @ " .. proc:path())
+    hunt.log("- Owned by: " .. proc:owner())
+    hunt.log("- Started by: " .. proc:ppid())
+    hunt.log("- Command Line: " .. proc:cmd_line())
 end
 ```
 
@@ -253,11 +253,11 @@ Install-Module -name PowerForensics
 local bytes = { string.byte(psscript, 1,-1) }
 -- get a base64 string from the data
 psscript_b64 = hunt.base64(bytes)
-hunt.print("base64 script: " .. psscript_b64)
+hunt.log("base64 script: " .. psscript_b64)
 -- get the bytes from a base64 string
 back_to_string = hunt.unbase64(psscript_b64)
 -- print bytes as a string
-hunt.print("back to string: " .. hunt.bytes_to_string(back_to_string))
+hunt.log("back to string: " .. hunt.bytes_to_string(back_to_string))
 ```
 
 | Function | Description |
@@ -265,6 +265,7 @@ hunt.print("back to string: " .. hunt.bytes_to_string(back_to_string))
 | **hunt.base64(data: bytes)** | Takes a `table` of bytes and returns a base64 encoded `string`. |
 | **hunt.unbase64(data: string)** | Takes a base64 encoded `string` and returns a `table` of bytes. |
 | **hunt.bytes_to_string(data: bytes)** | Takes a `table` of bytes and returns a `string`. |
+| **hunt.gzip(from: string, to: string, level: int)** | Compresses `from` into an archive `to`, level is optional (0-9) |
 
 
 ### Examples
