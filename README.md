@@ -184,10 +184,16 @@ These registry functions interact with the `Nt*` series of Windows APIs and
 therefore use `\Registry\Users` style of registry paths. These functions will
 return empty values when run on platforms other than Windows.
 
+```lua
+for name,value in pairs(hunt.registry.list_values("...")) do
+    print(name .. ": " .. value)
+end
+```
+
 | Function | Description |
 | --- | --- |
 | **hunt.registry.list_keys(path: string)** | Returns a list of registry keys located at `path`. This will be empty on failure. |
-| **hunt.registry.list_values(path: string)** | Returns a list of registry values located at `path`. This will be empty on failure. |
+| **hunt.registry.list_values(path: string)** | Returns a table of registry name/values pairs located at `path`. This will be empty on failure. All values are coerced into strings. |
 
 #### Hashing
 
