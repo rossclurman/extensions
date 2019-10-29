@@ -20,7 +20,11 @@
 
 
 -- You can define shell scripts here if using any.
-initscript = [==[
+ps_script = [==[
+
+]==]
+
+python_cmd = [==[
 
 ]==]
 
@@ -39,7 +43,11 @@ hunt.verbose("Starting Extention. Hostname: " .. host_info:hostname() .. ", Doma
 if hunt.env.is_windows() then
   -- Insert your Windows code
 
-  result = "Test" -- filler [DELETE ME]
+  -- Create powershell process and feed script/commands to its stdin
+  -- local pipe = io.popen("powershell.exe -noexit -nologo -nop -command -", "w")
+  -- pipe:write(initscript) -- load up powershell functions and vars
+  -- pipe:write('Get-StringsMatch -Temppath ' .. tempfile .. ' -Path ' .. searchpath .. ' -Strings ' .. make_psstringarray(strings))
+  -- r = pipe:close()
 
 elseif hunt.env.is_macos() then
     -- Insert your MacOS Code
@@ -48,9 +56,13 @@ elseif hunt.env.is_macos() then
 elseif hunt.env.is_linux() or hunt.env.has_sh() then
     -- Insert your POSIX (linux) Code
 
+    -- os.execute("python -u -c \"" .. python_script.. "\"" )
+
 else
     hunt.warn("WARNING: Not a compatible operating system for this extension [" .. host_info:os() .. "]")
 end
+
+
 
 ----------------------------------------------------
 -- SECTION 4: Results
@@ -59,11 +71,9 @@ end
 --      Good, Low Risk, Unknown, Suspicious, or Bad
 --    Include any host-side processing and analysis necessary to report the
 --   appropriate status.
---
---  In addition, one or more log statements can be used to send data in text
---   format.
 ----------------------------------------------------
 
+result = "Test" -- filler [DELETE ME]
 
 -- Set the returned threat status of the host based on the extension results
 if string.find(result, "test") then

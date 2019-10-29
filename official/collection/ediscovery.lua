@@ -201,19 +201,21 @@ if hunt.env.is_windows() and hunt.env.has_powershell() then
 	-- Insert your Windows Code
 	hunt.debug("Operating on Windows")
     tempfile = [[c:\windows\temp\icext.csv]]
+
 	-- Create powershell process and feed script/commands to its stdin
 	local pipe = io.popen("powershell.exe -noexit -nologo -nop -command -", "w")
 	pipe:write(initscript) -- load up powershell functions and vars
 	pipe:write('Get-StringsMatch -Temppath ' .. tempfile .. ' -Path ' .. searchpath .. ' -Strings ' .. make_psstringarray(strings))
 	r = pipe:close()
-	-- hunt.verbose("Powershell Returned: "..tostring(r))
+	hunt.verbose("Powershell Returned: "..tostring(r))
 
+    -- read output file from powershell
 	file = io.open(tempfile, "r") -- r read mode
 	if file then
         output = file:read("*all") -- *a or *all reads the whole file
         if output then
             hunt.log(output) -- send to Infocyte
-            -- os.remove(temp)
+            os.remove(temp)
         end
         file:close()
     end

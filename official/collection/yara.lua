@@ -36,6 +36,7 @@ host_info = hunt.env.host_info()
 os = host_info:os()
 hunt.verbose("Starting Extention. Hostname: " .. host_info:hostname() .. ", Domain: " .. host_info:domain() .. ", OS: " .. host_info:os() .. ", Architecture: " .. host_info:arch())
 
+-- Load Yara rules
 result = false
 yara = hunt.yara.new()
 yara:add_rule(rule)
@@ -66,5 +67,7 @@ end
 
 if result == true then
     hunt.bad()
+else
+    hunt.good()
 end
 hunt.log("Result: Extension successfully executed on " .. hostname)
